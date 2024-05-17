@@ -2,13 +2,20 @@ import pandas as pd
 from tkinter import filedialog
 import tkinter as tk
 import tkinter.filedialog as fd
+import chardet
 
 def read_csv():
-    # Read the csv file
+    # Read the csv file with encoding detection
     root = tk.Tk()
     root.withdraw()
     file_path = fd.askopenfilename()
-    df = pd.read_csv(file_path)
+
+    # Detect file encoding
+    with open(file_path, 'rb') as f:
+        result = chardet.detect(f.read())
+    encoding = result['encoding']
+
+    df = pd.read_csv(file_path, encoding=encoding)
     return df
 
 def output_csv(df):
@@ -33,3 +40,4 @@ def process_csv():
 
 # Run the process
 process_csv()
+
